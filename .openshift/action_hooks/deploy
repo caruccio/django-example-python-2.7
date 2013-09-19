@@ -40,5 +40,5 @@ $PYTHON $DJANGO_APP_DIR/manage.py syncdb --noinput
 echo "Executing '$PYTHON $DJANGO_APP_DIR/manage.py collectstatic --noinput'"
 $PYTHON $DJANGO_APP_DIR/manage.py collectstatic --noinput
 
-echo "Executing 'ln -s $OPENSHIFT_PYTHON_DIR/repo/wsgi/openshift/openshift/media $OPENSHIFT_PYTHON_DIR/repo/wsgi/static/media'"
-ln -s $OPENSHIFT_PYTHON_DIR/repo/wsgi/openshift/openshift/media $OPENSHIFT_PYTHON_DIR/repo/wsgi/static/media
+# echo "Executing 'ln -s $OPENSHIFT_PYTHON_DIR/repo/wsgi/openshift/openshift/media $OPENSHIFT_PYTHON_DIR/repo/wsgi/static/media'"
+# ln -s $OPENSHIFT_PYTHON_DIR/repo/wsgi/openshift/openshift/media $OPENSHIFT_PYTHON_DIR/repo/wsgi/static/media
