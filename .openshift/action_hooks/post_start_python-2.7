@@ -14,4 +14,5 @@
 # throughout the system.
 
 # for now we use system's nginx intallation
+echo Starting nginx
 /usr/sbin/nginx -c $OPENSHIFT_REPO_DIR/config/nginx.conf >$OPENSHIFT_PYTHON_LOG_DIR/nginx_error.log 2>&1
