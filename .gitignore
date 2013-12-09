@@ -1,0 +1,12 @@
+*.log
+*.pot
+*.py[co]
+*.sw[po]
+*.db
+*.bak
+*.orig
+*~
+.project
+.pydevproject
+local_settings.py
+venv/

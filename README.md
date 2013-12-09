@@ -1,3 +1,4 @@
-The OpenShift `python` cartridge documentation can be found at:
+django-example-python-2.7
+=========================
 
-https://github.com/openshift/origin-server/tree/master/cartridges/openshift-origin-cartridge-python/README.md
+Getup cloud openshift server python 2.7 and django 1.5.1

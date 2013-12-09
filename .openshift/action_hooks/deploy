@@ -1,0 +1,44 @@
+#!/bin/bash
+# This deploy hook gets executed after dependencies are resolved and the
+# build hook has been run but before the application has been started back
+# up again.  This script gets executed directly, so it could be python, php,
+# ruby, etc.
+
+set -e
+
+function substitute_vars()
+{
+	sed -e "s|\$OPENSHIFT_HOMEDIR|$OPENSHIFT_HOMEDIR|" \
+		-e "s|\$OPENSHIFT_REPO_DIR|$OPENSHIFT_REPO_DIR|" \
+		-e "s|\$OPENSHIFT_PYTHON_LOG_DIR|$OPENSHIFT_PYTHON_LOG_DIR|" \
+		-e "s|\$OPENSHIFT_APP_DNS|$OPENSHIFT_APP_DNS|" \
+		-e "s|\$OPENSHIFT_DATA_DIR|$OPENSHIFT_DATA_DIR|" \
+		-e "s|\$OPENSHIFT_PYTHON_IP|$OPENSHIFT_PYTHON_IP|" \
+		-e "s|\$OPENSHIFT_PYTHON_PORT|$OPENSHIFT_PYTHON_PORT|" \
+		-e "s|\$OPENSHIFT_PYTHON_LOG_DIR|$OPENSHIFT_PYTHON_LOG_DIR|"
+}
+
+for DIR in /config /nginx/tmp /static/{static,media}; do
+	[ -d $OPENSHIFT_DATA_DIR/$DIR ] || mkdir -p $OPENSHIFT_DATA_DIR/$DIR
+done
+
+echo Generating config: $OPENSHIFT_DATA_DIR/config/nginx.conf
+substitute_vars < $OPENSHIFT_REPO_DIR/config/nginx.conf > $OPENSHIFT_DATA_DIR/config/nginx.conf
+
+# Django configuration
+
+ADMIN_USER='admin'
+ADMIN_PASSWORD='ad2min3'
+ADMIN_EMAIL='python27@django.com.br'
+PYTHON="$OPENSHIFT_PYTHON_DIR/virtenv/bin/python"
+DJANGO_APP_DIR="$OPENSHIFT_REPO_DIR/wsgi/openshift"
+
+echo "Executing '$PYTHON $DJANGO_APP_DIR/manage.py syncdb --noinput'"
+$PYTHON $DJANGO_APP_DIR/manage.py syncdb --noinput
+# echo "from django.contrib.auth.models import User; User.objects.create_superuser('admin', '$ADMIN_EMAIL', '$ADMIN_PASSWORD')" | $PYTHON "$OPENSHIFT_REPO_DIR"wsgi/openshift/manage.py shell
+
+echo "Executing '$PYTHON $DJANGO_APP_DIR/manage.py collectstatic --noinput'"
+$PYTHON $DJANGO_APP_DIR/manage.py collectstatic --noinput
+
+# echo "Executing 'ln -s $OPENSHIFT_PYTHON_DIR/repo/wsgi/openshift/openshift/media $OPENSHIFT_PYTHON_DIR/repo/wsgi/static/media'"
+# ln -s $OPENSHIFT_PYTHON_DIR/repo/wsgi/openshift/openshift/media $OPENSHIFT_PYTHON_DIR/repo/wsgi/static/media
