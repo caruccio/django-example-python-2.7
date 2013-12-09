@@ -10,8 +10,8 @@ for DIR in /config /nginx/tmp /static/{static,media}; do
 	[ -d $OPENSHIFT_DATA_DIR/$DIR ] || mkdir -p $OPENSHIFT_DATA_DIR/$DIR
 done
 
-echo Generating config: $OPENSHIFT_DATA_DIR/config/nginx.conf
-/usr/bin/oo-erb $OPENSHIFT_REPO_DIR/config/nginx.conf.erb > $OPENSHIFT_DATA_DIR/config/nginx.conf
+echo Generating config: $OPENSHIFT_REPO_DIR/config/nginx.conf
+/usr/bin/oo-erb $OPENSHIFT_REPO_DIR/config/nginx.conf.erb > $OPENSHIFT_REPO_DIR/config/nginx.conf
 
 # Django configuration
 
