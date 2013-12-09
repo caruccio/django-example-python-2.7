@@ -2,7 +2,7 @@
 import imp, os
 
 # a setting to determine whether we are running on OpenShift
-ON_OPENSHIFT = os.environ.has_key('OPENSHIFT_REPO_DIR'):
+ON_OPENSHIFT = os.environ.has_key('OPENSHIFT_REPO_DIR')
 
 PROJECT_DIR = os.path.dirname(os.path.realpath(__file__))
 
