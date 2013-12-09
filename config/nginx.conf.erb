@@ -4,7 +4,7 @@
 worker_processes    1;
 
 error_log           <%= ENV['OPENSHIFT_PYTHON_LOG_DIR'] %>/nginx_error.log;
-pid                 <%= ENV['OPENSHIFT_DATA_DIR'] %>/nginx/nginx.pid;
+pid                 <%= ENV['OPENSHIFT_PYTHON_DIR'] %>/run/nginx.pid;
 
 events {
     worker_connections 1024;
