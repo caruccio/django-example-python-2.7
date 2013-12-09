@@ -16,8 +16,8 @@ echo Generating config: $OPENSHIFT_DATA_DIR/config/nginx.conf
 # Django configuration
 
 ADMIN_USER='admin'
-ADMIN_PASSWORD='ad2min3'
-ADMIN_EMAIL='python27@django.com.br'
+ADMIN_PASSWORD='OpenShiftAdmin123'
+ADMIN_EMAIL='admin@example.com'
 PYTHON="$OPENSHIFT_PYTHON_DIR/virtenv/bin/python"
 DJANGO_APP_DIR="$OPENSHIFT_REPO_DIR/wsgi/openshift"
 
