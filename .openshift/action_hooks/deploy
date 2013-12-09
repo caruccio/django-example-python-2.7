@@ -6,11 +6,10 @@
 
 set -e
 
-for DIR in /config /nginx/tmp /static/{static,media}; do
-	[ -d $OPENSHIFT_DATA_DIR/$DIR ] || mkdir -p $OPENSHIFT_DATA_DIR/$DIR
-done
+[ -d $OPENSHIFT_DATA_DIR/media  ] || mkdir -p $OPENSHIFT_DATA_DIR/media
+[ -d $OPENSHIFT_DATA_DIR/static ] || mkdir -p $OPENSHIFT_DATA_DIR/static
 
-echo Generating config: $OPENSHIFT_REPO_DIR/config/nginx.conf
+echo Generating nginx config: $OPENSHIFT_REPO_DIR/config/nginx.conf
 /usr/bin/oo-erb $OPENSHIFT_REPO_DIR/config/nginx.conf.erb > $OPENSHIFT_REPO_DIR/config/nginx.conf
 
 # Django configuration
@@ -18,15 +17,16 @@ echo Generating config: $OPENSHIFT_REPO_DIR/config/nginx.conf
 ADMIN_USER='admin'
 ADMIN_PASSWORD='OpenShiftAdmin123'
 ADMIN_EMAIL='admin@example.com'
-PYTHON="$OPENSHIFT_PYTHON_DIR/virtenv/bin/python"
 DJANGO_APP_DIR="$OPENSHIFT_REPO_DIR/wsgi/openshift"
 
-echo "Executing '$PYTHON $DJANGO_APP_DIR/manage.py syncdb --noinput'"
-$PYTHON $DJANGO_APP_DIR/manage.py syncdb --noinput
+source $OPENSHIFT_PYTHON_DIR/virtenv/bin/activate
+
+echo "Executing 'python $DJANGO_APP_DIR/manage.py syncdb --noinput'"
+python $DJANGO_APP_DIR/manage.py syncdb --noinput
 # echo "from django.contrib.auth.models import User; User.objects.create_superuser('admin', '$ADMIN_EMAIL', '$ADMIN_PASSWORD')" | $PYTHON "$OPENSHIFT_REPO_DIR"wsgi/openshift/manage.py shell
 
 echo "Executing '$PYTHON $DJANGO_APP_DIR/manage.py collectstatic --noinput'"
-$PYTHON $DJANGO_APP_DIR/manage.py collectstatic --noinput
+python $DJANGO_APP_DIR/manage.py collectstatic --noinput
 
 # echo "Executing 'ln -s $OPENSHIFT_PYTHON_DIR/repo/wsgi/openshift/openshift/media $OPENSHIFT_PYTHON_DIR/repo/wsgi/static/media'"
 # ln -s $OPENSHIFT_PYTHON_DIR/repo/wsgi/openshift/openshift/media $OPENSHIFT_PYTHON_DIR/repo/wsgi/static/media
